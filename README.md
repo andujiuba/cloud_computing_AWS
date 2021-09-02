@@ -1,7 +1,7 @@
 # AWS
 ## **Wednesday 1/9**:
 ##### **INSERT IMAGE**
- Previously, we have been working using *monolith architecture*. 
+ Previously, we have been working using *monolith architecture*. We are now working towards two-tier architecture.
 
 #### **Today's tasks**:
 - Create machine `Linux ubuntu 16.04 - EC2`
@@ -15,27 +15,27 @@ from local host to cloud, `ssh`
     - sre.pem file save into ssh folder in local host
 - MUST NOT SHARE AWS KEYS ANYWHERE --> DO NOT PUSH IT GITHUB OR ANY PUBLIC CLOUD
 
-### Creating new AWS machine
+### Creating New AWS Machine
 
 1. Install NGINX and launch on public IP to ensure access to AWS resources
 
 2. Create instanace on AWS
-    - Launch instances
-        - `Amazon Machine Type`: Ubuntu Server 16.04 LTS (HVM), SSD Volume Type -- 64-bit
-        - `Instance Type`: t2.micro
-        - `Configure Instance Details`: 
-        *Number of instances:* 1
-        *Network:* default
-        *Subnet:* DevOpsStudent default 1a
-        *Auto-assign Public IP:* Enable
-        - `Storage`: Keep settings
-        - `Add Tags`: `Name` `SRE_akunma_app`
-        - `Security`:
-        *Group Name:* SRE_akunma_app
-        *Description:* SRE_akunma_app
-        *Type:* SSH *Source:* My IP *Description:* From my IP
-        `Add Rule`
-        *Type:* HTTP *Source:* Anywhere *Decription:* ???
+    - Launch instances:
+    - `Amazon Machine Type`: Ubuntu Server 16.04 LTS (HVM), SSD Volume Type -- 64-bit
+    - `Instance Type`: t2.micro
+    - `Configure Instance Details`: 
+    *Number of instances:* 1
+    *Network:* default
+    *Subnet:* DevOpsStudent default 1a
+    *Auto-assign Public IP:* Enable
+    - `Storage`: Keep settings
+    - `Add Tags`: `Name` `SRE_akunma_app`
+    - `Security`:
+    *Group Name:* SRE_akunma_app
+    *Description:* SRE_akunma_app
+    *Type:* SSH *Source:* My IP *Description:* From my IP
+    `Add Rule`
+    *Type:* HTTP *Source:* Anywhere *Decription:* Public access 
 
 3. In GitBash, `cd` into home and create new directory `.ssh`
 
@@ -46,7 +46,7 @@ from local host to cloud, `ssh`
     - Follow instructions under `SSH client` tab
     - Run instance in GitBash using last text string
 
-**Make sure to run all the dependancies that are outlined in the previous cloud_computing_intro repo**
+**Make sure to run all the dependancies that are outlined in the previous *cloud_computing_intro repo* `provision.sh` file**
 
 6. Copy app folder from previous `Vagrantfile` into new machine.
 From the `Vagrantfile` directory:
@@ -64,5 +64,82 @@ scp -ri ~/.ssh/sre_key.pem app ubuntu@*Public IP address
     - Save rules
 
 9. Run machine again, `npm start` --> paste IP address in search bar and the app is running
+
+10. Terminate the machine once you're done, or use `npm stop`
+
+## **Thursday 2/9:**
+##### *IMAGE*
+
+
+**Monolith architecture:** 
+Simple w limitations
+Can get slowed down by heavy apps
+Challenging to scale up on demand
+More suited for simpler/lighter apps
+![image](Monolith.png)
+**Two-tier:** 
+Dont have to wait on db team to do work
+
+#### **Today's Task:**
+- configure reverse proxy w nginx
+- set up another ec2 instance w same ubuntu 16.04 to set up mongodb
+- connect app with mongodb ec2 to see /posts
+- only app can access db (port 27017)
+- set up mongodb w same provising script
+- change bind IP 0.0.0.0 i mongod.conf
+- restart db
+- enable db
+- check status of db (must be active)
+- create env variable DB_HOST=db_ip:27017
+
+<br>
+
+### Creating New Instance for MongoDB
+
+- same steps but do not enable in configure (usually, but in this instance we enable)
+- new security group, same first option new rule
+custom TCP, 27017 port range, source: anywhere, Desc: add the app instance ip
+
+- run the instance in .ssh directroy (finiah at instll mongodb)
+- install all depndancies in mongo provision.sh file
+sudo systemctl status mongod
+sudo systectl restart
+enable
+status
+cd /etc
+sudo nano mongod.conf --> change bindIp to 0.0.0.0
+restart
+enable
+
+### Configuring App with Reverse Proxy
+
+- follow steps from other repo
+
+### Setting Up DB page (/posts)
+
+sys restaty nginx
+create env variable --> DB_HOST
+echo "export DB_HOST=*DB IP*:27017/posts" >> ~/.bashrc
+source ~/.bashrc
+cd app, node seeds/seed.js
+sudo npm start
+
+
+### Implemetation of 2 Teir Architecture/Deployment
+
+
+
+### idek
+
+- create AMIs of instances and stop/terminate instance and running state
+- want AMI to have mongobd installed
+- sleect AMI click LAunch and use same settings as instance (choose existing security group)
+
+in gitbash: ssh -i "sre_key.pem" ubuntu@ec2-54-228-85-20.eu-west-1.compute.amazonaws.com
+
+
+To Research:
+
+- What is an AMI?
 
 
