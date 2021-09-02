@@ -67,7 +67,7 @@ scp -ri ~/.ssh/sre_key.pem app ubuntu@*Public IP address
 
 10. Terminate the machine once you're done, or use `npm stop`
 
-## **Thursday 2/9:**
+## **Thursday 2/9: 2 Tier Architecture Deployment**
 ##### *IMAGE*
 
 
@@ -91,7 +91,7 @@ Dont have to wait on db team to do work
 - enable db
 - check status of db (must be active)
 - create env variable DB_HOST=db_ip:27017
-
+#### **2 tier architecture deployment with node -app frontend, mongodb as backend**
 <br>
 
 ### Creating New Instance for MongoDB
@@ -123,6 +123,3 @@ echo "export DB_HOST=*DB IP*:27017/posts" >> ~/.bashrc
 source ~/.bashrc
 cd app, node seeds/seed.js
 sudo npm start
-
-
-### Implemetation of 2 Teir Architecture/Deployment
