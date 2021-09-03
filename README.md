@@ -68,15 +68,16 @@ scp -ri ~/.ssh/sre_key.pem app ubuntu@*Public IP address
 10. Terminate the machine once you're done, or use `npm stop`
 
 ## **Thursday 2/9: 2 Tier Architecture Deployment**
-##### *IMAGE*
 
+![image](Monolith.png)
+**vs** ![image](two_tier.png)
 
 **Monolith architecture:** 
 Simple w limitations
 Can get slowed down by heavy apps
 Challenging to scale up on demand
 More suited for simpler/lighter apps
-![image](Monolith.png)
+
 **Two-tier:** 
 Dont have to wait on db team to do work
 
@@ -123,3 +124,24 @@ echo "export DB_HOST=*DB IP*:27017/posts" >> ~/.bashrc
 source ~/.bashrc
 cd app, node seeds/seed.js
 sudo npm start
+
+<br>
+
+## Building AMIs
+
+![image](ami_lifecycle.png)
+
+- create AMIs of instances and stop/terminate instance and running state
+- want AMI to have mongobd installed
+- click instance, actions, image, create image --> name and description: sre_akunma_*instance name*_ami
+- sleect AMI click LAunch and use same settings as instance (choose existing security group)
+
+in gitbash: ssh -i "sre_key.pem" ***ubuntu***@ec2-54-228-85-20.eu-west-1.compute.amazonaws.com
+
+- add app_ami ip to security port for db
+
+To Research:
+
+- What is an AMI?
+
+AWS introduction - EC2 instances - Security groups-inbound and outbound rules,  - step by step guide how to deploy 2tier app on aws, building AMIs
